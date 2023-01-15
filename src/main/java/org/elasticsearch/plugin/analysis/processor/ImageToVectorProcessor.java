@@ -6,6 +6,7 @@ import org.elasticsearch.ingest.IngestDocument;
 import org.elasticsearch.ingest.Processor;
 import org.elasticsearch.plugin.analysis.util.ImageToVectorUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,7 @@ public class ImageToVectorProcessor extends AbstractProcessor {
         return document;
     }
 
-    private List<String> getImageVectorValue(String fieldValue) {
+    private List<String> getImageVectorValue(String fieldValue) throws IOException {
         String[] vectorValue= ImageToVectorUtil.imageUrlToVector(fieldValue);
         List<String> vectorList = new ArrayList<>();
         for(String vector : vectorValue)

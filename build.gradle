@@ -21,7 +21,6 @@ repositories {
 }
 
 dependencies {
-  implementation 'org.springframework:spring-web:4.3.11.RELEASE'
   implementation group: 'commons-collections', name: 'commons-collections', version: '3.2'
   implementation group: 'org.elasticsearch', name: 'elasticsearch', version: version
   implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.0'
@@ -46,6 +45,7 @@ task buildPluginZip(type: Zip, dependsOn:[':jar']) {
   archiveBaseName = 'image-url-to-vector-plugin'
   classifier = 'plugin'
   from 'build/libs'
+  from 'src/main/plugin-metadata'
   from 'src/main/resources'
 }
 
