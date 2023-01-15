@@ -1,9 +1,11 @@
 package org.elasticsearch.plugin.analysis.util;
 
+import org.elasticsearch.SpecialPermission;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.AccessController;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
