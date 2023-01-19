@@ -19,13 +19,15 @@ public class ImageToVectorProcessor extends AbstractProcessor {
 
     private String field;
     private String img_to_vec_api;
+    private String http_method;
 
     public static final String TYPE = "url-image-to-vector";
 
-    protected ImageToVectorProcessor(String tag, String description, String field, String img_to_vec_api) {
+    protected ImageToVectorProcessor(String tag, String description, String field, String img_to_vec_api,String http_method) {
         super(tag, description);
         this.field = field;
         this.img_to_vec_api = img_to_vec_api;
+        this.http_method = http_method;
     }
 
     public static final class Factory implements Processor.Factory {
@@ -34,7 +36,8 @@ public class ImageToVectorProcessor extends AbstractProcessor {
                                 String description, Map<String, Object> config) throws Exception {
             String field = ConfigurationUtils.readStringProperty(TYPE, tag, config, "field");
             String url = ConfigurationUtils.readStringProperty(TYPE,tag,config,"img_to_vec_api");
-            return new ImageToVectorProcessor(tag,description,field,url);
+            String httpMethod = ConfigurationUtils.readStringProperty(TYPE,tag,config,"http_method");
+            return new ImageToVectorProcessor(tag,description,field,url,httpMethod);
         }
     }
 
@@ -52,7 +55,7 @@ public class ImageToVectorProcessor extends AbstractProcessor {
         }
         AccessController.doPrivileged((PrivilegedAction<IngestDocument>) () ->{
             try {
-                document.setFieldValue(field,getImageVectorValue(document.getFieldValue(field,String.class),this.img_to_vec_api));
+                document.setFieldValue(field,getImageVectorValue(document.getFieldValue(field,String.class),this.img_to_vec_api,this.http_method));
                 return document;
             } catch (IOException e) {
                 System.out.println("e.getMessage() = " + e.getMessage());
@@ -63,8 +66,8 @@ public class ImageToVectorProcessor extends AbstractProcessor {
     }
 
 
-    private List<String> getImageVectorValue(String fieldValue , String img_to_vec_api) throws IOException {
-        String[] vectorValue= ImageToVectorUtil.imageUrlToVector(fieldValue,img_to_vec_api);
+    private List<String> getImageVectorValue(String fieldValue , String img_to_vec_api, String http_method) throws IOException {
+        String[] vectorValue= ImageToVectorUtil.imageUrlToVector(fieldValue,img_to_vec_api,http_method);
         List<String> vectorList = new ArrayList<>();
         for(String vector : vectorValue)
         {

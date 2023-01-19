@@ -10,15 +10,14 @@ import java.util.regex.Pattern;
 public class ImageToVectorUtil {
 
     private static final String URL_TO_VEC_API_URL = "http://127.0.0.1:29888/urlImagevector";
-    private static final String POST = "POST";
     private static final String CONTENT_TYPE = "application/json";
 
 
-    public static String[] imageUrlToVector(String imageUrl, String img_to_vec_api) throws IOException {
+    public static String[] imageUrlToVector(String imageUrl,String httpMethod, String img_to_vec_api) throws IOException {
         URL url;
         url = getUrl(img_to_vec_api);
 
-        HttpURLConnection connection = getHttpURLConnection(url);
+        HttpURLConnection connection = getHttpURLConnection(url,httpMethod);
 
         String json="{\"image_url\" : \"" +imageUrl+"\"}";
         sendRequest(connection, json);
@@ -44,9 +43,9 @@ public class ImageToVectorUtil {
         return stringBuffer;
     }
 
-    private static HttpURLConnection getHttpURLConnection(URL url) throws IOException {
+    private static HttpURLConnection getHttpURLConnection(URL url,String httpMethod) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod(POST);
+        connection.setRequestMethod(httpMethod);
         connection.setRequestProperty("Content-Type", CONTENT_TYPE);
         connection.setDoOutput(true);
         return connection;
